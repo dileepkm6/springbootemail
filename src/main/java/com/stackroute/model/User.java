@@ -7,39 +7,38 @@ public class User
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="user_id")
-    private long userid;
+    private long userId;
 
     private String emailId;
 
     private String password;
 
-    @Column(name="first_name")
     private String firstName;
 
-    @Column(name="last_name")
     private String lastName;
+
+    private String role;
 
     private boolean isEnabled=false;
 
-    public User(long userid, String emailId, String password, String firstName, String lastName) {
-        this.userid = userid;
+    public User(long userId, String emailId, String password, String firstName, String lastName, String role) {
+        this.userId = userId;
         this.emailId = emailId;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        //this.isEnabled = isEnabled;
+        this.role = role;
     }
 
     public User() {
     }
 
-    public long getUserid() {
-        return userid;
+    public long getUserId() {
+        return userId;
     }
 
-    public void setUserid(long userid) {
-        this.userid = userid;
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     public String getEmailId() {
@@ -72,6 +71,14 @@ public class User
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public boolean isEnabled() {
