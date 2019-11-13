@@ -38,15 +38,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public BCryptPasswordEncoder encodePwd()
-    {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     @Override
@@ -60,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // We don't need CSRF for this example
         httpSecurity.csrf().disable()
                 // dont authenticate this particular request
-                .authorizeRequests().antMatchers("/authenticate").permitAll().and().authorizeRequests().antMatchers("/h2-console/**").permitAll().
+                .authorizeRequests().antMatchers("/api/v1/authenticate","/api/v1/company/registerCompany").permitAll().and().authorizeRequests().antMatchers("/h2-console/**").permitAll().
                 // all other requests need to be authenticated
                         anyRequest().authenticated().and().
                 // make sure we use stateless session; session won't be used to

@@ -3,7 +3,8 @@ package com.stackroute.model;
 import javax.persistence.*;
 
 @Entity
-public class User
+@Table(name = "user")
+public class DAOUser
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,7 +22,7 @@ public class User
 
     private boolean isEnabled=false;
 
-    public User(long userId, String emailId, String password, String firstName, String lastName, String role) {
+    public DAOUser(long userId, String emailId, String password, String firstName, String lastName, String role) {
         this.userId = userId;
         this.emailId = emailId;
         this.password = password;
@@ -30,7 +31,7 @@ public class User
         this.role = role;
     }
 
-    public User() {
+    public DAOUser() {
     }
 
     public long getUserId() {

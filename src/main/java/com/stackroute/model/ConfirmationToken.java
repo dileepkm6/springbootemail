@@ -17,12 +17,12 @@ public class ConfirmationToken
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
 
-    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @OneToOne(targetEntity = DAOUser.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
-    private User user;
+    private DAOUser DAOUser;
 
-    public ConfirmationToken(User user) {
-        this.user = user;
+    public ConfirmationToken(DAOUser DAOUser) {
+        this.DAOUser = DAOUser;
         createdDate = new Date();
         confirmationToken = UUID.randomUUID().toString();
     }
@@ -51,12 +51,12 @@ public class ConfirmationToken
         this.createdDate = createdDate;
     }
 
-    public User getUser() {
-        return user;
+    public DAOUser getDAOUser() {
+        return DAOUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setDAOUser(DAOUser DAOUser) {
+        this.DAOUser = DAOUser;
     }
 
     public ConfirmationToken() {

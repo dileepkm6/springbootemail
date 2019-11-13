@@ -1,7 +1,7 @@
 package com.stackroute.controller;
 
 import com.stackroute.model.ConfirmationToken;
-import com.stackroute.model.User;
+import com.stackroute.model.DAOUser;
 import com.stackroute.repository.ConfirmationTokenRepository;
 import com.stackroute.repository.UserRepository;
 import com.stackroute.services.EmailSenderService;
@@ -29,28 +29,28 @@ public class UserAccountController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user)
+    public ResponseEntity<?> register(@RequestBody DAOUser DAOUser)
     {
-        User existingUser=userRepository.findByEmailIdIgnoreCase(user.getEmailId());
+        DAOUser existingDAOUser =userRepository.findByEmailIdIgnoreCase(DAOUser.getEmailId());
         Map map=new HashMap<>();
-        if(existingUser!=null)
+        if(existingDAOUser !=null)
         {
             map.put("type","error");
-            map.put("message","user already exist with given emailId");
+            map.put("message","DAOUser already exist with given emailId");
             return new ResponseEntity<Map>(map,HttpStatus.CONFLICT);
         }
         else
         {
-            String encryptPwd=bCryptPasswordEncoder.encode(user.getPassword());
-            user.setPassword(encryptPwd);
-            user.setRole("user");
-            userRepository.save(user);
-            ConfirmationToken confirmationToken = new ConfirmationToken(user);
+            String encryptPwd=bCryptPasswordEncoder.encode(DAOUser.getPassword());
+            DAOUser.setPassword(encryptPwd);
+            DAOUser.setRole("DAOUser");
+            userRepository.save(DAOUser);
+            ConfirmationToken confirmationToken = new ConfirmationToken(DAOUser);
 
             confirmationTokenRepository.save(confirmationToken);
 
             SimpleMailMessage mailMessage = new SimpleMailMessage();
-            mailMessage.setTo(user.getEmailId());
+            mailMessage.setTo(DAOUser.getEmailId());
             mailMessage.setSubject("Complete Registration!");
             mailMessage.setFrom("dileepkm6@gmail.com");
             mailMessage.setText("To confirm your account, please click here : "
@@ -58,8 +58,8 @@ public class UserAccountController {
 
             emailSenderService.sendEmail(mailMessage);
 
-            map.put("type","user");
-            map.put("message","user successfully registered");
+            map.put("type","DAOUser");
+            map.put("message","DAOUser successfully registered");
         }
 
         return new ResponseEntity<Map>(map,HttpStatus.OK);
@@ -70,9 +70,9 @@ public class UserAccountController {
 
         if(token != null)
         {
-            User user = userRepository.findByEmailIdIgnoreCase(token.getUser().getEmailId());
-            user.setEnabled(true);
-            userRepository.save(user);
+            DAOUser DAOUser = userRepository.findByEmailIdIgnoreCase(token.getDAOUser().getEmailId());
+            DAOUser.setEnabled(true);
+            userRepository.save(DAOUser);
             return new ResponseEntity<String>("account verified",HttpStatus.OK);
         }
 
@@ -80,8 +80,12 @@ public class UserAccountController {
 
     }
 
-//    @RequestMapping(value="/signIn", method= RequestMethod.GET)
-//    public ResponseEntity<?> signIn(@RequestP)
+    @RequestMapping(value="/users", method= RequestMethod.GET)
+    public ResponseEntity<?> allUsers()
+    {
+        DAOUser user=userRepository.findByEmailId("dileepkm6@gmail.com");
+        return new ResponseEntity<DAOUser>(user,HttpStatus.OK);
+    }
 
 
 }

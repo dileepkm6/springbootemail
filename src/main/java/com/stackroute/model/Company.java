@@ -10,15 +10,15 @@ public class Company
     private int id;
     private String companyId;
     private String companyName;
-    @OneToOne(targetEntity = User.class,fetch = FetchType.EAGER)
+    @OneToOne(targetEntity = DAOUser.class,fetch = FetchType.EAGER)
     @JoinColumn(nullable = false,name = "user_id")
-    private User user;
+    private DAOUser DAOUser;
 
-    public Company(String companyId, String companyName, User user) {
+    public Company(String companyId, String companyName, DAOUser DAOUser) {
         this.id = id;
         this.companyId = companyId;
         this.companyName = companyName;
-        this.user = user;
+        this.DAOUser = DAOUser;
     }
 
     public Company() {
@@ -48,11 +48,11 @@ public class Company
         this.companyName = companyName;
     }
 
-    public User getUser() {
-        return user;
+    public DAOUser getDAOUser() {
+        return DAOUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setDAOUser(DAOUser DAOUser) {
+        this.DAOUser = DAOUser;
     }
 }

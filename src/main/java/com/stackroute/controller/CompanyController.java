@@ -3,7 +3,7 @@ package com.stackroute.controller;
 import com.stackroute.model.Company;
 import com.stackroute.model.CompanyDetails;
 import com.stackroute.model.ConfirmationToken;
-import com.stackroute.model.User;
+import com.stackroute.model.DAOUser;
 import com.stackroute.repository.CompanyRepository;
 import com.stackroute.repository.ConfirmationTokenRepository;
 import com.stackroute.repository.UserRepository;
@@ -40,7 +40,7 @@ public class CompanyController {
     public ResponseEntity<?> registerCompany(@RequestBody CompanyDetails companyDetails)
     {
         Company existCompany=companyRepository.findByCompanyIdIgnoreCase(companyDetails.getCompanyId());
-        User existUser=userRepository.findByEmailIdIgnoreCase(companyDetails.getEmailId());
+        DAOUser existDAOUser =userRepository.findByEmailIdIgnoreCase(companyDetails.getEmailId());
         Map map=new HashMap<>();
         if(existCompany!=null)
         {
@@ -48,7 +48,7 @@ public class CompanyController {
             map.put("message","company already exist with given Id");
             return new ResponseEntity<Map>(map,HttpStatus.CONFLICT);
         }
-        else if(existUser!=null)
+        else if(existDAOUser !=null)
         {
             map.put("type","error");
             map.put("message","user already exist with given emailId");
@@ -58,19 +58,19 @@ public class CompanyController {
         {
             String encodedPass=cryptPasswordEncoder.encode(companyDetails.getPassword());
             companyDetails.setPassword(encodedPass);
-            User user=new User();
-            user.setEmailId(companyDetails.getEmailId());
-            user.setPassword(companyDetails.getPassword());
-            user.setRole("admin");
-            userRepository.save(user);
-            Company company=new Company(companyDetails.getCompanyId(),companyDetails.getCompanyName(),user);
+            DAOUser DAOUser =new DAOUser();
+            DAOUser.setEmailId(companyDetails.getEmailId());
+            DAOUser.setPassword(companyDetails.getPassword());
+            DAOUser.setRole("admin");
+            userRepository.save(DAOUser);
+            Company company=new Company(companyDetails.getCompanyId(),companyDetails.getCompanyName(), DAOUser);
             companyRegistrationService.saveCompany(company);
 
-            ConfirmationToken confirmationToken=new ConfirmationToken(user);
+            ConfirmationToken confirmationToken=new ConfirmationToken(DAOUser);
             confirmationTokenRepository.save(confirmationToken);
 
             SimpleMailMessage mailMessage = new SimpleMailMessage();
-            mailMessage.setTo(user.getEmailId());
+            mailMessage.setTo(DAOUser.getEmailId());
             mailMessage.setSubject("Complete Registration!");
             mailMessage.setFrom("dileepkm6@gmail.com");
             mailMessage.setText("To confirm your account, please click here : "
