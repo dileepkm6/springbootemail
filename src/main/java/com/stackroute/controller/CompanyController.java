@@ -21,7 +21,7 @@ import java.util.Map;
 
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 @RequestMapping("/api/v1/company/")
 public class CompanyController {
     @Autowired

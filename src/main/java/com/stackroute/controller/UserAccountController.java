@@ -87,5 +87,15 @@ public class UserAccountController {
         return new ResponseEntity<DAOUser>(user,HttpStatus.OK);
     }
 
+    @GetMapping("/getMember")
+    public ResponseEntity<?> getMember(@RequestParam("emailId") String emailId)
+    {
+        DAOUser user = userRepository.findByEmailId(emailId);
+        if(user!=null)
+        {
+            return new ResponseEntity<DAOUser>(user,HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+    }
 
 }
